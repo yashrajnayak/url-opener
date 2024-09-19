@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Opener Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #status {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>URL Opener Tool</h1>
+    <p>Enter one URL per line:</p>
+    <textarea id="urlList" placeholder="https://example.com&#10;https://example.org"></textarea>
+    <button onclick="openUrls()">Open URLs</button>
+    <div id="status"></div>
+
+    <script>
+        function openUrls() {
+            const urlList = document.getElementById('urlList').value;
+            const urls = urlList.split('\n').filter(url => url.trim() !== '');
+            const statusDiv = document.getElementById('status');
+            
+            statusDiv.textContent = `Attempting to open ${urls.length} URL(s)...`;
+            
+            urls.forEach((url, index) => {
+                setTimeout(() => {
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://' + url;
+                    }
+                    window.open(url, '_blank');
+                    statusDiv.textContent = `Opened ${index + 1} of ${urls.length} URL(s)`;
+                    
+                    if (index === urls.length - 1) {
+                        setTimeout(() => {
+                            statusDiv.textContent += ". Done!";
+                        }, 1000);
+                    }
+                }, index * 500);
+            });
+        }
+    </script>
+</body>
+</html>
